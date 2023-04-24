@@ -1,62 +1,48 @@
+// main.go
+
 package main
 
 import (
-	"github.com/spf13/cobra"
-	"log"
-	"naas/api"
-	"naas/data"
-	"os"
-	"strconv"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"naas/handlers"
+	"naas/repositories"
+	"naas/service"
 )
 
-var port int
-
-var rootCmd = &cobra.Command{
-	Use:   "myapp",
-	Short: "MyApp is a CLI tool for managing tenants",
-	Long:  `MyApp is a CLI tool for managing tenants in a system`,
-}
-
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "Starts the API server",
-	Run: func(cmd *cobra.Command, args []string) {
-		// Call the function that starts the API server
-		// Get the port to run the server on from the "port" flag
-
-		startAPIServer()
-	},
-}
-
-func startAPIServer() {
-	repo := data.NewInMemoryTenantRepository(data.DefaultGenerateID)
-	handler := api.NewTenantHandler(repo)
-
-	router := handler.SetupRoutes()
-
-	// Start the server on the specified port
-	if err := router.Run(":" + strconv.Itoa(port)); err != nil {
-		log.Fatalf("Error starting server: %v", err)
-	}
-}
-
-func init() {
-	// Add the "serve" command to the root command
-	rootCmd.AddCommand(serveCmd)
-
-	// Set any flags for the "serve" command
-	serveCmd.Flags().String("port", "8080", "Port to run the API server on")
-}
-
 func main() {
-	_port, err := serveCmd.Flags().GetString("port")
-	if err != nil {
-		log.Fatalf("Error getting port: %v", err)
-	}
+	// Initialize repositories
+	tenantRepo := repositories.NewTenantRepository()
+	namespaceRepo := repositories.NewNamespaceRepository()
 
-	port, err = strconv.Atoi(_port)
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatalf("Error executing command: %v", err)
-		os.Exit(1)
-	}
+	// Initialize services
+	tenantService := service.NewTenantService(tenantRepo)
+	namespaceService := service.NewNamespaceService(namespaceRepo)
+
+	// Initialize handlers
+	tenantHandler := handlers.NewTenantHandler(tenantService)
+	namespaceHandler := handlers.NewNamespaceHandler(namespaceService)
+
+	// Initialize Gin router
+	router := gin.Default()
+
+	// Configure CORS middleware
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true // Allow all origins for development
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+
+	// Apply CORS middleware to your Gin instance
+	router.Use(cors.New(config))
+
+	// Define routes
+	router.POST("/tenants", tenantHandler.CreateTenant)
+	router.GET("/tenants", tenantHandler.ListTenants)
+	router.GET("/tenants/:id", tenantHandler.GetTenant)
+	router.POST("/namespaces/:tenantId", namespaceHandler.CreateNamespace)
+	router.GET("/namespaces/all/:tenantId", namespaceHandler.GetAllNamespaces)
+	router.GET("/namespaces/:tenantId/:name", namespaceHandler.GetNamespace)
+
+	// Start server
+	router.Run(":8082")
 }

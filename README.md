@@ -1,3 +1,14 @@
+let us implement a CLI tool to interact with our REST API server.
+the tool will be called "naasctl". We will implement it in Golang with the Cobra framework.
+naasctl will have the following command structure:
+
+naasctl tenant create mytenant (creates a new tenant mytenant)
+naasctl tenant get mytenant (retrieves info on tenant mytenant)
+naasctl namespace create mynamespace --tenant mytenant (creates a namespace mynamespace for tenant mytenant)
+naasctl namespace list --tenant mytenant (gets all namespaces for tenant mytenant)
+
+
+---
 we are going to implement an REST  API with Golang and the Gin web framework. We have two
 resources; "tenant" and "namespace". A tenant can have many namespaces, but one namespace
 belongs to only one tenant. We have the following endpoints:
