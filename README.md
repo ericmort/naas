@@ -1,4 +1,4 @@
-# Golang Gin API Implementation
+# Golang Gin API Implementation, using ChatGPT
 
 ### You
 we are going to implement an REST  API with Golang and the Gin web framework. We have two

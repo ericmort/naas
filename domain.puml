@@ -1,0 +1,50 @@
+@startuml
+
+class Tenant {
+  <<valueObject>>
+  - id: string
+  - name: string
+}
+
+class Namespace {
+  <<valueObject>>
+  - name: string
+}
+
+class TenantRepository {
+  - tenants: map[string]Tenant
+  + CreateTenant(tenant: *Tenant) error
+  + GetTenant(id: string) (*Tenant, error)
+}
+
+class NamespaceRepository {
+  - namespaces: map[string]map[string]Namespace
+  + CreateNamespace(tenantID string, namespace: *Namespace) error
+  + GetAllNamespaces(tenantID string) ([]Namespace, error)
+  + GetNamespace(tenantID string, name string) (*Namespace, error)
+}
+
+class TenantService {
+  - tenantRepository: *TenantRepository
+  + CreateTenant(tenant: *Tenant) error
+  + GetTenant(id: string) (*Tenant, error)
+}
+
+class NamespaceService {
+  - namespaceRepository: *NamespaceRepository
+  + CreateNamespace(tenantID string, namespace: *Namespace) error
+  + GetAllNamespaces(tenantID string) ([]Namespace, error)
+  + GetNamespace(tenantID string, name string) (*Namespace, error)
+}
+
+TenantRepository --> Tenant
+NamespaceRepository --> Namespace
+TenantService --> TenantRepository
+NamespaceService --> NamespaceRepository
+NamespaceService --> Namespace
+NamespaceService --> Tenant
+TenantHandler --> TenantService
+NamespaceHandler --> NamespaceService
+NamespaceHandler --> Tenant
+
+@enduml

@@ -1,4 +1,3 @@
-// domain/tenant.go
 package domain
 
 type Tenant struct {
