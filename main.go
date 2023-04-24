@@ -44,5 +44,8 @@ func main() {
 	router.GET("/namespaces/:tenantId/:name", namespaceHandler.GetNamespace)
 
 	// Start server
-	router.Run(":8082")
+	err := router.Run(":8082")
+	if err != nil {
+		os.Exit(1)
+	}
 }

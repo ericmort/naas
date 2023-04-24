@@ -57,7 +57,8 @@ func TestNamespaceHandler_GetAllNamespaces(t *testing.T) {
 		{Name: "test-namespace-3"},
 	}
 	for _, ns := range namespaces {
-		repo.CreateNamespace("test-tenant", &ns)
+		err := repo.CreateNamespace("test-tenant", &ns)
+		assert.NoError(t, err)
 	}
 
 	req, err := http.NewRequest(http.MethodGet, "/namespaces/all/test-tenant", nil)
@@ -88,7 +89,8 @@ func TestNamespaceHandler_GetNamespace(t *testing.T) {
 	namespace := &domain.Namespace{
 		Name: "test-namespace",
 	}
-	repo.CreateNamespace("test-tenant", namespace)
+	err := repo.CreateNamespace("test-tenant", namespace)
+	assert.NoError(t, err)
 
 	req, err := http.NewRequest(http.MethodGet, "/namespaces/test-tenant/test-namespace", nil)
 	assert.NoError(t, err)
