@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/naas.iml" filepath="$PROJECT_DIR$/.idea/naas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../naas-flux/.idea/naas-flux.iml" filepath="$PROJECT_DIR$/../naas-flux/.idea/naas-flux.iml" />
     </modules>
   </component>
 </project>

@@ -33,7 +33,8 @@ func TestTenantService_GetTenant(t *testing.T) {
 		ID:   "test-tenant",
 		Name: "Test Tenant",
 	}
-	repo.CreateTenant(tenant)
+	err := repo.CreateTenant(tenant)
+	assert.NoError(terr)
 
 	result, err := service.GetTenant("test-tenant")
 	assert.NoError(t, err)
@@ -69,7 +70,8 @@ func TestNamespaceService_GetAllNamespaces(t *testing.T) {
 		{Name: "test-namespace-3"},
 	}
 	for _, ns := range namespaces {
-		repo.CreateNamespace("test-tenant", &ns)
+		err := repo.CreateNamespace("test-tenant", &ns)
+		assert.NoError(t, err)
 	}
 
 	result, err := service.GetAllNamespaces("test-tenant")
@@ -88,7 +90,8 @@ func TestNamespaceService_GetNamespace(t *testing.T) {
 	namespace := &domain.Namespace{
 		Name: "test-namespace",
 	}
-	repo.CreateNamespace("test-tenant", namespace)
+	err := repo.CreateNamespace("test-tenant", namespace)
+	assert.NoError(t, err)
 
 	result, err := service.GetNamespace("test-tenant", "test-namespace")
 	assert.NoError(t, err)
