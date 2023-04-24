@@ -129,7 +129,10 @@ func TestTenantHandler_ListTenants(t *testing.T) {
 	response, err := io.ReadAll(w.Body)
 	assert.NoError(t, err)
 	// Verify that the response matches the expected output
-	expectedOutput := `[{"id":"1","name":"Tenant 1"},{"id":"2","name":"Tenant 2"},{"id":"3","name":"Tenant 3"}]`
-	assert.Equal(t, expectedOutput, string(response))
+	expectedOutput := tenants
+	var tenantsOut []domain.Tenant
+	err = json.Unmarshal(response, &tenantsOut)
+	assert.NoError(t, err)
+	assert.ElementsMatch(t, expectedOutput, tenantsOut)
 
 }

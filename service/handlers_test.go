@@ -34,7 +34,7 @@ func TestTenantService_GetTenant(t *testing.T) {
 		Name: "Test Tenant",
 	}
 	err := repo.CreateTenant(tenant)
-	assert.NoError(terr)
+	assert.NoError(t, err)
 
 	result, err := service.GetTenant("test-tenant")
 	assert.NoError(t, err)
