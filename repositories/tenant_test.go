@@ -32,7 +32,8 @@ func TestTenantRepository_GetTenant(t *testing.T) {
 		ID:   "test-tenant",
 		Name: "Test Tenant",
 	}
-	repo.CreateTenant(tenant)
+	err := repo.CreateTenant(tenant)
+	assert.NoError(t, err)
 
 	result, err := repo.GetTenant("test-tenant")
 	assert.NoError(t, err)

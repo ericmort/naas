@@ -71,7 +71,8 @@ func TestTenantHandler_GetTenant(t *testing.T) {
 		ID:   "test-tenant",
 		Name: "Test Tenant",
 	}
-	repo.CreateTenant(tenant)
+	err := repo.CreateTenant(tenant)
+	assert.NoError(t, err)
 
 	req, err := http.NewRequest(http.MethodGet, "/tenants/test-tenant", nil)
 	assert.NoError(t, err)
@@ -110,7 +111,8 @@ func TestTenantHandler_ListTenants(t *testing.T) {
 	tenant3 := domain.Tenant{ID: "3", Name: "Tenant 3"}
 	tenants := []domain.Tenant{tenant1, tenant2, tenant3}
 	for _, tenant := range tenants {
-		repo.CreateTenant(&tenant)
+		err := repo.CreateTenant(&tenant)
+		assert.NoError(t, err)
 	}
 	// Mock the ListTenants method of the repository to return the mock tenants
 	req, err := http.NewRequest(http.MethodGet, "/tenants", nil)
