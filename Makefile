@@ -9,3 +9,8 @@ run:
 test:
 	go test ./...
 
+docker-build:
+	docker build -t ghcr.io/ericmort/naas/naas:latest .
+
+docker-push:
+	docker push ghcr.io/ericmort/naas/naas:latest
