@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: naas
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: naas
+  template:
+    metadata:
+      labels:
+        app: naas
+    spec:
+      containers:
+        - name: naas
+          image: ghcr.io/ericmort/naas:main
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: naas
+  namespace: default
+spec:
+  selector:
+    app: naas
+  type: LoadBalancer
+  ports:
+    - port: 8003
+      targetPort: 8082
