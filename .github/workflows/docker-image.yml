@@ -15,4 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag naas:$(date +%s)
+      run: docker build . --file Dockerfile --tag naas:v0.1
+    - name: Publish the Docker image
+      run: docker push naas:v0.1
